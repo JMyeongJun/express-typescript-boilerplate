@@ -1,21 +1,26 @@
 import express from "express";
 import dotenv from "dotenv";
-
-dotenv.config();
+import cors from "cors";
 
 const app = express();
+dotenv.config();
+
+// Parse RequestBody
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
+// Cross-Origin-Resouce-Sharing
+app.use(cors());
 
 app.get("/", (req, res, next) => {
 	res.send(`Hell1o2: ${process.env.PORT}`);
 });
 
-app.listen(5000, () => {
-	console.log("Server running on Port:5000");
+app.post("/test", (req, res, next) => {
+	console.log(req.body);
+	res.status(400).json({ ...req.body, error: 401 });
 });
 
-const hello = (msg: string) => {
-	console.log(msg);
-	console.log(
-		"alsdkfjasdfasdfasdfasdfasdfasdfasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, msg, msg, msg",
-	);
-};
+app.listen(process.env.PORT, () => {
+	console.log(`Server running on Port:${process.env.PORT}`);
+});
