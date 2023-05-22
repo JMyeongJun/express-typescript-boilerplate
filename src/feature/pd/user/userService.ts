@@ -1,9 +1,10 @@
-export const getList = async (body: object) => {
+import { UserGetListBody } from './userController';
+
+export const getList = async (body: UserGetListBody): Promise<object> => {
   try {
-    console.log(body);
     return body;
   } catch (e) {
     console.log(e);
-    return;
+    return { error: 'catch' };
   }
 };

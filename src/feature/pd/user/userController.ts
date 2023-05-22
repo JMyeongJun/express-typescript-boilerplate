@@ -1,34 +1,32 @@
 import { Request, Response } from 'express';
-import Joi from 'joi';
+import Joi, { Schema } from 'joi';
 import * as userService from './userService';
+import api from '../../../util/api';
+
+export interface UserGetListBody {
+  username: string;
+  birthYear?: number;
+  height?: number;
+  mobNo?: string;
+}
 
 export const getList = async (req: Request, res: Response) => {
   // validate할 schema 정의
-  const schema = Joi.object().keys({
-    username: Joi.string().min(3).max(30).required(),
-    birthyear: Joi.number().integer().min(1900).max(2018),
+  const schema: Schema<UserGetListBody> = Joi.object<UserGetListBody>().keys({
+    username: Joi.string().required(),
+    birthYear: Joi.number().integer(),
+    height: Joi.number().positive(),
+    mobNo: Joi.string(),
   });
 
-  const asidf = 12;
-
   // validate
-  const { error, value } = schema.validate(req.body);
-  const validateError = error?.details[0].message;
-  console.log('error: ', error?.details[0].message); // null
-  console.log('value: ', value); // {username: "username1"}
+  const { error } = schema.validate(req.body);
 
-  console.log('alsdkf');
-
-  const asdfas: { user_id: number } = { user_id: 1 };
-  const ADF_SDOFN = 'ALSDKF';
-
-  asdfas.user_id = 10;
-
-  console.log(asdfas);
-
-  console.log(ADF_SDOFN);
+  if (error) {
+    return api.badRequest(res, error.message);
+  }
 
   const result = await userService.getList(req.body);
 
-  return res.json(validateError ? { error: validateError } : result);
+  return api.ok(res, result);
 };
