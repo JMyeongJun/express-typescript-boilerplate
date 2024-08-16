@@ -17,6 +17,10 @@ app.use(cors());
 // Add routes
 app.use(process.env.API_V1 + '/feature/pd', pdRouter);
 
+app.use((req, res, next) => {
+  next(new Error('not found'));
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on Port:${process.env.PORT}`);
 });

@@ -4,9 +4,10 @@
   "description": "express boilerplate with typescript",
   "main": "src/index.ts",
   "scripts": {
+    "build": "tsc --build",
+    "prestart": "yarn build",
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
-    "build": "tsc --build",
     "lint": "eslint src"
   },
   "repository": "https://github.com/JMyeongJun/express-typescript-boilerplate",
